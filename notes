@@ -1,0 +1,24 @@
+P1
+P2
+
+scissors
+rock
+paper
+
+P1 scissors
+P1 rock
+P1 paper
+
+
+P2 scissors
+P2 rock
+P2 paper
+
+
+P1 scissors P2 scissors -> draw
+P1 scissors P2 rock -> P2 +1
+P1 scissors P2 paper -> P1 + 1
+
+P1 rock P2 scissors -> P1 + 1
+P1 rock P2 rock -> draw
+P
