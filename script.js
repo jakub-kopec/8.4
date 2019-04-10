@@ -1,8 +1,11 @@
 //Output div
 var output = document.getElementById('output');
+var result = document.getElementById('result');
 
 //Wynik
 var score;
+var playerScore = 0;
+var computerScore = 0;
 
 //Btn's
 var papierBtn = document.getElementById('papier');
@@ -14,7 +17,7 @@ var nozyceBtn = document.getElementById('nozyce');
 /*Get player move
 * -zwraca id klikniętego btn'a*/
 var getPlayerM = function(event) {
-    console.log('getPlayeM - event.target.id')
+    console.log('getPlayerM - event.target.id')
     console.log(event.target.id)
     return event.target.id;
 }
@@ -51,6 +54,18 @@ var printRoundOutput = function(score, playerM, computerM) {
     console.log(output)
 }
 
+var updateScore = function(score) {
+    if (score === 'wygrana gracza') {
+        playerScore += 1;
+    } else if (score === 'wygrana komputera') {
+        computerScore += 1;
+    }
+}
+
+var printScore = function(playerScore, computerScore) {
+    result.innerHTML = 'playerScore ' + playerScore + ' - ' + computerScore + ' computerScore';
+}
+
 var playerMove = function(event) {
     console.log('playerMove - event')
     console.log(event)
@@ -80,6 +95,8 @@ var playerMove = function(event) {
     console.log('playerMove - score')
     console.log(score)
     printRoundOutput(score, playerM, computerM);
+    updateScore(score);
+    printScore(playerScore, computerScore);
 }
 
 papierBtn.addEventListener('click', playerMove);
