@@ -1,16 +1,22 @@
 //Output div
 var output = document.getElementById('output');
 var result = document.getElementById('result');
+var roundsLeft = document.getElementById('roundsLeft')
+var gameEnd = document.getElementById('gameEnd')
+
 
 //Wynik
 var score;
 var playerScore = 0;
 var computerScore = 0;
+var allRounds = 0;
+var gameContinue = true;
 
 //Btn's
 var papierBtn = document.getElementById('papier');
 var kamienBtn = document.getElementById('kamien');
 var nozyceBtn = document.getElementById('nozyce');
+var newGameBtn = document.getElementById('newGameBtn');
 
 
 //Functions
@@ -54,6 +60,7 @@ var printRoundOutput = function(score, playerM, computerM) {
     console.log(output)
 }
 
+/*Update score'a w pamięci*/
 var updateScore = function(score) {
     if (score === 'wygrana gracza') {
         playerScore += 1;
@@ -62,11 +69,13 @@ var updateScore = function(score) {
     }
 }
 
+/*Printout score'a na stronie*/
 var printScore = function(playerScore, computerScore) {
     result.innerHTML = 'playerScore ' + playerScore + ' - ' + computerScore + ' computerScore';
 }
 
-var playerMove = function(event) {
+/*Zagranie gracza i wytriggerowane akcje*/
+var playerMove = function(event, gameContinue) {
     console.log('playerMove - event')
     console.log(event)
     console.log('playerMove - event.target')
@@ -97,12 +106,41 @@ var playerMove = function(event) {
     printRoundOutput(score, playerM, computerM);
     updateScore(score);
     printScore(playerScore, computerScore);
+    printRoundsToWin(allRounds);
+    checkGameContinue(playerScore, computerScore, allRounds);
+}
+
+/*Start nowej gry*/
+var newGameStart = function() {
+    allRounds = window.prompt('Do ilu wygranych rund chcesz grać?')
+    console.log('allRounds -->')
+    console.log(allRounds)
+    return allRounds
+}
+
+var printRoundsToWin = function(allRounds) {
+    roundsLeft.innerHTML = 'Wygrywa gracz, który zdobędzie ' + allRounds + ' rund' + '<br><br>';
+}
+
+var checkGameContinue = function(playerScore, computerScore, allRounds) {
+    console.log(playerScore, computerScore, allRounds)
+    if (playerScore.toString() === allRounds) {
+        gameEnd.innerHTML = 'YOU WON THE ENTIRE GAME!!!' + '<br><br>'
+        gameContinue = false
+    } else if (computerScore.toString() === allRounds) {
+        gameEnd.innerHTML = 'COMPUTER WON THE ENTIRE GAME!!!' + '<br><br>'
+        gameContinue = false
+    }
+}
+
+var blockBtns = function(gameContinue) {
+
 }
 
 papierBtn.addEventListener('click', playerMove);
 kamienBtn.addEventListener('click', playerMove);
 nozyceBtn.addEventListener('click', playerMove);
-
+newGameBtn.addEventListener('click', newGameStart)
 
 
 
