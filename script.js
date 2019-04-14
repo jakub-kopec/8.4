@@ -1,8 +1,8 @@
 //Output div
 var output = document.getElementById('output');
 var result = document.getElementById('result');
-var roundsLeft = document.getElementById('roundsLeft')
-var gameEnd = document.getElementById('gameEnd')
+var roundsLeft = document.getElementById('roundsLeft');
+var gameEnd = document.getElementById('gameEnd');
 
 
 //Wynik
@@ -18,129 +18,120 @@ var kamienBtn = document.getElementById('kamien');
 var nozyceBtn = document.getElementById('nozyce');
 var newGameBtn = document.getElementById('newGameBtn');
 
+//Strings
+var rock = 'kamien';
+var scissors = 'nozyce';
+var paper = 'papier';
+
+var computerWin = 'computerWin';
+var playerWin = 'playerWin';
+var draw = 'draw';
 
 //Functions
-/*Get player move
-* -zwraca id klikniętego btn'a*/
 var getPlayerM = function(event) {
-    console.log('getPlayerM - event.target.id')
-    console.log(event.target.id)
     return event.target.id;
-}
+};
 
-/*Get computer move
-* zwraca randomową całkowitą liczbę <1;3>
-* mapuje cyfrę na stringa
-* zwraca stringa*/
 var getComputerM = function() {
     var computerM = Math.floor((Math.random() * 3) + 1);
-    //Przemapowanie zmiennej computerM na stringa
     if (computerM === 1) {
-        computerM = 'papier';
+        return paper;
     } else if (computerM === 2) {
-        computerM = 'kamien';
+        return rock;
     } else {
-        return computerM = 'nozyce';
+        return scissors;
     }
-    console.log('getComputerM - computerM')
-    console.log(computerM);
-    return computerM;
-}
+};
 
-/*Print Round Output
-* W divie o klasie "output" printuje msg o wyniku rundy w zależności od rezultatu*/
 var printRoundOutput = function(score, playerM, computerM) {
-    if (score === 'wygrana gracza') {
+    if (score === playerWin) {
         output.innerHTML += 'YOU WON: you played ' + playerM + ', computer played ' + computerM + '<br><br>'
-    } else if (score === 'wygrana komputera') {
+    } else if (score === computerWin) {
         output.innerHTML += 'COMPUTER WON: it played ' + computerM + ', YOU played ' + playerM + '<br><br>'
-    } else if (score === 'remis') {
+    } else {
         output.innerHTML += 'REMIS: it played ' + computerM + ', YOU played ' + playerM + '<br><br>'
     }
-    console.log(output)
-}
+};
 
-/*Update score'a w pamięci*/
+
 var updateScore = function(score) {
-    if (score === 'wygrana gracza') {
+    if (score === playerWin) {
         playerScore += 1;
-    } else if (score === 'wygrana komputera') {
+    } else if (score === computerWin) {
         computerScore += 1;
     }
-}
+};
 
-/*Printout score'a na stronie*/
 var printScore = function(playerScore, computerScore) {
     result.innerHTML = 'playerScore ' + playerScore + ' - ' + computerScore + ' computerScore';
-}
+};
 
-/*Zagranie gracza i wytriggerowane akcje*/
-var playerMove = function(event, gameContinue) {
-    console.log('playerMove - event')
-    console.log(event)
-    console.log('playerMove - event.target')
-    console.log(event.target)
-    console.log('playerMove - event.target.id')
-    console.log(event.target.id)
-    console.log('playerMove - event.type')
-    console.log(event.type)
+var playerMove = function(event) {
+
+    console.log('gameContinue', gameContinue)
     var playerM = getPlayerM(event);
     var computerM = getComputerM();
+    console.log(playerM, computerM);
     if (computerM ===  playerM) {
-        score = 'remis';
-    } else if (computerM === 'papier' && playerM === 'kamien'){
-        score = 'wygrana komputera';
-    } else if (computerM === 'papier' && playerM === 'nozyce') {
-        score = 'wygrana gracza';
-    } else if (computerM === 'kamien' && playerM === 'papier') {
-        score = 'wygrana gracza';
-    } else if (computerM === 'kamien' && playerM === 'nozyce') {
-        score = 'wygrana komputera';
-    } else if (computerM === 'nozyce' && playerM === 'papier') {
-        score = 'wygrana komputera';
-    } else if (computerM === 'nozyce' && playerM === 'kamien'){
-        score = 'wygrana gracza';
+        score = draw;
+    } else if ((computerM === paper && playerM === rock) || (computerM === rock && playerM === scissors) || (computerM === scissors && playerM === paper)){
+        score = computerWin;
+    } else if (computerM === paper && playerM === scissors || (computerM === rock && playerM === paper) || (computerM === scissors && playerM === rock)) {
+        score = playerWin;
     }
-    console.log('playerMove - score')
-    console.log(score)
+    console.log('playerMove - score');
+    console.log(score);
     printRoundOutput(score, playerM, computerM);
     updateScore(score);
     printScore(playerScore, computerScore);
     printRoundsToWin(allRounds);
-    checkGameContinue(playerScore, computerScore, allRounds);
-}
+    printGameContinue(playerScore, computerScore, allRounds);
+    console.log('gameContinue 2', gameContinue)
+    checkGameContinue()
+};
 
 /*Start nowej gry*/
 var newGameStart = function() {
-    allRounds = window.prompt('Do ilu wygranych rund chcesz grać?')
-    console.log('allRounds -->')
-    console.log(allRounds)
+    allRounds = window.prompt('Do ilu wygranych rund chcesz grać?');
+    console.log('allRounds -->');
+    console.log(allRounds);
+    gameContinue = true;
     return allRounds
-}
+};
 
 var printRoundsToWin = function(allRounds) {
     roundsLeft.innerHTML = 'Wygrywa gracz, który zdobędzie ' + allRounds + ' rund' + '<br><br>';
-}
+};
 
-var checkGameContinue = function(playerScore, computerScore, allRounds) {
-    console.log(playerScore, computerScore, allRounds)
+var printGameContinue = function(playerScore, computerScore, allRounds) {
+    console.log(playerScore, computerScore, allRounds);
     if (playerScore.toString() === allRounds) {
-        gameEnd.innerHTML = 'YOU WON THE ENTIRE GAME!!!' + '<br><br>'
-        gameContinue = false
+        gameEnd.innerHTML = 'YOU WON THE ENTIRE GAME!!!' + '<br><br>';
+        gameContinue = false;
+        console.log('gameContinue -->');
+        console.log(gameContinue)
     } else if (computerScore.toString() === allRounds) {
-        gameEnd.innerHTML = 'COMPUTER WON THE ENTIRE GAME!!!' + '<br><br>'
-        gameContinue = false
+        gameEnd.innerHTML = 'COMPUTER WON THE ENTIRE GAME!!!' + '<br><br>';
+        gameContinue = false;
+        console.log('gameContinue -->');
+        console.log(gameContinue)
     }
-}
+};
 
-var blockBtns = function(gameContinue) {
+var pressNewGame = function() {
+    alert('Press new game')
+};
 
-}
+var checkGameContinue = function() {
+    console.log('gameContinue checkGame',gameContinue)
+    if (gameContinue === true) {
+        return playerMove
+    } else {
+        return pressNewGame
+    }
+};
 
-papierBtn.addEventListener('click', playerMove);
-kamienBtn.addEventListener('click', playerMove);
-nozyceBtn.addEventListener('click', playerMove);
-newGameBtn.addEventListener('click', newGameStart)
-
-
-
+papierBtn.addEventListener('click', checkGameContinue());
+kamienBtn.addEventListener('click', checkGameContinue());
+nozyceBtn.addEventListener('click', checkGameContinue());
+newGameBtn.addEventListener('click', newGameStart);
