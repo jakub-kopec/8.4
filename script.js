@@ -10,7 +10,7 @@ var score;
 var playerScore = 0;
 var computerScore = 0;
 var allRounds = 0;
-var gameContinue = true;
+var gameContinue = false;
 
 //Btn's
 var papierBtn = document.getElementById('papier');
@@ -67,11 +67,8 @@ var printScore = function(playerScore, computerScore) {
 };
 
 var playerMove = function(event) {
-
-    console.log('gameContinue', gameContinue)
     var playerM = getPlayerM(event);
     var computerM = getComputerM();
-    console.log(playerM, computerM);
     if (computerM ===  playerM) {
         score = draw;
     } else if ((computerM === paper && playerM === rock) || (computerM === rock && playerM === scissors) || (computerM === scissors && playerM === paper)){
@@ -79,15 +76,11 @@ var playerMove = function(event) {
     } else if (computerM === paper && playerM === scissors || (computerM === rock && playerM === paper) || (computerM === scissors && playerM === rock)) {
         score = playerWin;
     }
-    console.log('playerMove - score');
-    console.log(score);
     printRoundOutput(score, playerM, computerM);
     updateScore(score);
     printScore(playerScore, computerScore);
     printRoundsToWin(allRounds);
     printGameContinue(playerScore, computerScore, allRounds);
-    console.log('gameContinue 2', gameContinue)
-    checkGameContinue()
 };
 
 /*Start nowej gry*/
@@ -102,7 +95,6 @@ var newGameStart = function() {
         gameContinue = false
         alert('You have to type number value')
     }
-
 };
 
 var printRoundsToWin = function(allRounds) {
@@ -126,16 +118,16 @@ var pressNewGame = function() {
     alert('Press new game')
 };
 
-var checkGameContinue = function() {
+var onButtonClick = function(event) {
     console.log('gameContinue checkGame', gameContinue)
-    if (gameContinue === true) {
-        return playerMove
+    if (gameContinue) {
+        return playerMove(event)
     } else {
-        return pressNewGame
+        return pressNewGame()
     }
 };
 
-papierBtn.addEventListener('click', checkGameContinue());
-kamienBtn.addEventListener('click', checkGameContinue());
-nozyceBtn.addEventListener('click', checkGameContinue());
+papierBtn.addEventListener('click', onButtonClick);
+kamienBtn.addEventListener('click', onButtonClick);
+nozyceBtn.addEventListener('click', onButtonClick);
 newGameBtn.addEventListener('click', newGameStart);
