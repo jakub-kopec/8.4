@@ -87,9 +87,11 @@ var playerMove = function(event) {
 var newGameStart = function() {
     allRounds = window.prompt('Do ilu wygranych rund chcesz grać?');
     if (!isNaN(allRounds) && allRounds.length > 0) {
-        console.log('allRounds -->', allRounds);
         gameContinue = true;
         output.innerHTML = 'Let\'s play'
+        result.innerHTML = ''
+        playerScore = 0
+        computerScore = 0
         return allRounds
     } else {
         gameContinue = false
@@ -102,15 +104,12 @@ var printRoundsToWin = function(allRounds) {
 };
 
 var printGameContinue = function(playerScore, computerScore, allRounds) {
-    console.log(playerScore, computerScore, allRounds);
     if (playerScore.toString() === allRounds) {
         gameEnd.innerHTML = 'YOU WON THE ENTIRE GAME!!!' + '<br><br>';
         gameContinue = false;
-        console.log('gameContinue -->', gameContinue);
     } else if (computerScore.toString() === allRounds) {
         gameEnd.innerHTML = 'COMPUTER WON THE ENTIRE GAME!!!' + '<br><br>';
         gameContinue = false;
-        console.log('gameContinue -->', gameContinue);
     }
 };
 
@@ -119,7 +118,6 @@ var pressNewGame = function() {
 };
 
 var onButtonClick = function(event) {
-    console.log('gameContinue checkGame', gameContinue)
     if (gameContinue) {
         return playerMove(event)
     } else {
